@@ -1,18 +1,14 @@
-﻿Imports DevExpress.XtraBars.Navigation
+Imports DevExpress.XtraBars.Navigation
 Imports DevExpress.XtraEditors
 Imports System
-Imports System.Collections.Generic
 Imports System.ComponentModel
-Imports System.Data
 Imports System.Diagnostics
 Imports System.Drawing
-Imports System.Linq
-Imports System.Text
-Imports System.Threading.Tasks
 Imports System.Windows.Forms
 
 Namespace AccordionControl_ex
-    Partial Public Class Form1
+
+    Public Partial Class Form1
         Inherits Form
 
         Public Sub New()
@@ -21,7 +17,7 @@ Namespace AccordionControl_ex
 
         Private acControl As AccordionControl
 
-        Private Sub Form1_Load(ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Load
+        Private Sub Form1_Load(ByVal sender As Object, ByVal e As EventArgs)
             acControl = New AccordionControl()
             acControl.Dock = DockStyle.Left
             acControl.Parent = Me
@@ -31,17 +27,15 @@ Namespace AccordionControl_ex
 
         Private Sub InitAccordionControl()
             acControl.BeginUpdate()
-            Dim acRootGroupHome As New AccordionControlElement()
-            Dim acItemActivity As New AccordionControlElement()
-            Dim acItemNews As New AccordionControlElement()
-            Dim acRootItemSettings As New AccordionControlElement()
-
-            AddHandler acControl.ElementClick, AddressOf accordionControl1_ElementClick
-
+            Dim acRootGroupHome As AccordionControlElement = New AccordionControlElement()
+            Dim acItemActivity As AccordionControlElement = New AccordionControlElement()
+            Dim acItemNews As AccordionControlElement = New AccordionControlElement()
+            Dim acRootItemSettings As AccordionControlElement = New AccordionControlElement()
+            AddHandler acControl.ElementClick, New ElementClickEventHandler(AddressOf accordionControl1_ElementClick)
             ' 
             ' Root Group 'Home'
             ' 
-            acRootGroupHome.Elements.AddRange(New AccordionControlElement() { acItemActivity, acItemNews})
+            acRootGroupHome.Elements.AddRange(New AccordionControlElement() {acItemActivity, acItemNews})
             acRootGroupHome.Expanded = True
             acRootGroupHome.ImageOptions.ImageUri.Uri = "Home;Office2013"
             acRootGroupHome.Name = "acRootGroupHome"
@@ -70,9 +64,9 @@ Namespace AccordionControl_ex
             ' 
             ' itemSettingsControlContainer
             ' 
-            Dim itemSettingsControlContainer As New AccordionContentContainer()
-            Dim hyperlinkLabelControl1 As New HyperlinkLabelControl()
-            Dim toggleSwitch1 As New ToggleSwitch()
+            Dim itemSettingsControlContainer As AccordionContentContainer = New AccordionContentContainer()
+            Dim hyperlinkLabelControl1 As HyperlinkLabelControl = New HyperlinkLabelControl()
+            Dim toggleSwitch1 As ToggleSwitch = New ToggleSwitch()
             acControl.Controls.Add(itemSettingsControlContainer)
             acRootItemSettings.ContentContainer = itemSettingsControlContainer
             itemSettingsControlContainer.Controls.Add(hyperlinkLabelControl1)
@@ -86,7 +80,7 @@ Namespace AccordionControl_ex
             hyperlinkLabelControl1.Location = New System.Drawing.Point(26, 33)
             hyperlinkLabelControl1.Size = New System.Drawing.Size(107, 13)
             hyperlinkLabelControl1.Text = "www.devexpress.com"
-            AddHandler hyperlinkLabelControl1.HyperlinkClick, AddressOf hyperlinkLabelControl1_HyperlinkClick
+            AddHandler hyperlinkLabelControl1.HyperlinkClick, New DevExpress.Utils.HyperlinkClickEventHandler(AddressOf hyperlinkLabelControl1_HyperlinkClick)
             ' 
             ' toggleSwitch1
             ' 
@@ -97,38 +91,29 @@ Namespace AccordionControl_ex
             toggleSwitch1.Properties.OffText = "Offline Mode"
             toggleSwitch1.Properties.OnText = "Onlne Mode"
             toggleSwitch1.Size = New System.Drawing.Size(134, 24)
-            AddHandler toggleSwitch1.Toggled, AddressOf toggleSwitch1_Toggled
-
-            acControl.Elements.AddRange(New DevExpress.XtraBars.Navigation.AccordionControlElement() { acRootGroupHome, acRootItemSettings})
-
+            AddHandler toggleSwitch1.Toggled, New EventHandler(AddressOf toggleSwitch1_Toggled)
+            acControl.Elements.AddRange(New AccordionControlElement() {acRootGroupHome, acRootItemSettings})
             acRootItemSettings.Expanded = True
-
             acControl.EndUpdate()
         End Sub
 
-        Private Sub accordionControl1_ElementClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.Navigation.ElementClickEventArgs)
-            If e.Element.Style = DevExpress.XtraBars.Navigation.ElementStyle.Group Then
-                Return
-            End If
-            If e.Element.Tag Is Nothing Then
-                Return
-            End If
+        Private Sub accordionControl1_ElementClick(ByVal sender As Object, ByVal e As ElementClickEventArgs)
+            If e.Element.Style = ElementStyle.Group Then Return
+            If e.Element.Tag Is Nothing Then Return
             Dim itemID As String = e.Element.Tag.ToString()
-            If itemID = "idNews" Then
-                '...
+            If Equals(itemID, "idNews") Then
+            '...
             End If
+
             listBoxControl1.Items.Add(itemID & " clicked")
         End Sub
 
         Private Sub toggleSwitch1_Toggled(ByVal sender As Object, ByVal e As EventArgs)
-            '...
+        '...
         End Sub
 
         Private Sub hyperlinkLabelControl1_HyperlinkClick(ByVal sender As Object, ByVal e As DevExpress.Utils.HyperlinkClickEventArgs)
-            Process.Start(e.Text)
+            Call Process.Start(e.Text)
         End Sub
-
-
-
     End Class
 End Namespace
